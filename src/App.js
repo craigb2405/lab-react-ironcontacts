@@ -5,16 +5,14 @@ import { useState } from "react"
 
 
 function App() {
-  // Creating original state of actor array as first 5 objects from AllContacts Array
-
-  const [actor, setActor] = useState(AllContacts);
-  console.log(AllContacts);
-  console.log(actor);
-
-  // Function to sort actor array by name
+  // Iteration 1 - Creating a state variable to store an array (contacts) containing first 5 items. Also remove those items from AllContacts
+  const [contacts, setContacts] = useState(AllContacts.slice(0,5));
+  // Iteration 4 - Function to sort actor array by name and popularity
+  console.log(AllContacts)
+  // Name
 
   function sortName() {
-    const sortedArray = [...actor];
+    const sortedArray = [...contacts];
     sortedArray.sort((a, b) => {
       if (a.name < b.name) {
         return -1;
@@ -23,13 +21,14 @@ function App() {
       }
       return 0;
     });
-    setActor(sortedArray);
+    setContacts(sortedArray);
+    console.log(AllContacts)
   }
 
-  // Function to sort actor array by popularity
+  // Popularity
 
   function sortPopularity() {
-    const sortedArray = [...actor];
+    const sortedArray = [...contacts];
     sortedArray.sort((a, b) => {
       if (a.popularity < b.popularity) {
         return 1;
@@ -38,7 +37,7 @@ function App() {
       }
       return 0;
     });
-    setActor(sortedArray);
+    setContacts(sortedArray);
   }
 
   // Function to pick generate a random number from 0-AllContacts array length)
@@ -46,10 +45,13 @@ function App() {
     let n = Math.floor(Math.random() * AllContacts.length);
     // Then add that random number to the index of AllContacts to select a random actor
     let randomActor = AllContacts[n];
+    
     // Then push that actor into the actor array
-    actor.push({ randomActor });
+    contacts.push(randomActor);
+    
     // The use splice to remove that actor from AllContacts Array
     AllContacts.splice(n, 1);
+    console.log(AllContacts)
   }
 
   // return page with above functions and objects rendeed
@@ -60,29 +62,41 @@ function App() {
         <button onClick={pickRandom}>Pick Random</button>
         <button onClick={sortName}>Click me to sort by name</button>
         <button onClick={sortPopularity}>Click me to sort by popularity</button>
+<div className="tableContainer">
 
+<h1>Contacts: {contacts.length}</h1>
+<h1>AllContacts: {AllContacts.length}</h1>
         <table>
-          <th>
-            <tr className="vAlign">
+
+          <tr>
+         
               <td>Picture</td>
               <td>Name</td>
               <td>Popularity</td>
-            </tr>
+              <td>Won Oscar</td>
+              <td>Won Emmy</td>
+              
+              </tr>
 
-            {actor.map((contacts) => {
+
+            {contacts.map((contacts1) => {
               return (
-                <tr  className="vAlign" key={contacts.id}>
+                <tr key={contacts1.id}>
                   <td>
-                    <img src={contacts.pictureUrl} />
+                    <img src={contacts1.pictureUrl} alt={contacts1.name} />
                   </td>
-                  <td>{contacts.name}</td>
-                  <td>{contacts.popularity}</td>
+                  <td>{contacts1.name}</td>
+                  <td>{contacts1.popularity}</td>
+  {/* Iteration 2 conditionally display trophy if the actor has won emmy or oscar using a ternary operator*/}
+                  <td>{contacts1.wonOscar ? <p>{String.fromCodePoint('0x1F3C6')}</p> : " " }</td>
+                  <td>{contacts1.wonEmmy ? <p>{String.fromCodePoint('0x1F3C6')}</p> : " " }</td>
                 </tr>
               );
             })}
-          </th>
+          
         </table>
       </div>
+    </div>
     </div>
   );
 }
