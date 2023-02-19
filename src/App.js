@@ -1,15 +1,35 @@
 import "./App.css";
 import AllContacts from "./contacts.json";
-import { useState } from "react"
-
-
+import { useState } from "react";
 
 function App() {
-  // Iteration 1 - Creating a state variable to store an array (contacts) containing first 5 items. Also remove those items from AllContacts 
-  const [contacts, setContacts] = useState(AllContacts.slice(0,5));
+  // Iteration 1 - Creating a state variable to store an array (contacts) containing first 5 items. Originally had step to remove these from AllContacts but it was doing it twice for some reason. Removed this in favour of a function to check if the Id exists in the Contacts Array and if it does, dont add it.
+  const [contacts, setContacts] = useState(AllContacts.slice(0, 5));
+
+
+  // Iteration 2: Conditional add trophy emoji based on if they have won and oscar or emmy in the table section below.
+
+  // Iteration 3: Function to pick a random actor from the list of contacts and add it to the contacts array ✅
+  function pickRandom() {
+    let randomNumber = Math.floor(Math.random() * AllContacts.length);
+    // Then add that random number to the index of AllContacts to select a random actor
+    let randomActor = AllContacts[randomNumber];
+
+    // Used the follow solution as AllContacts array could still produce an actor already in the contacts array. This solution uses Sets which I found on https://joshcollinsworth.com/blog/confirm-all-ids-are-unique-in-an-array-of-javascript-objects-using-map-and-sets.
+
+    // use Set to map contacts into a variable containing only ids.
+    let ids = new Set(contacts.map((contacts) => contacts.id));
+    // use spread operator to create array called ids and spread the set into it.
+    ids = [...ids];
+    // If randomActor.id is found within ids (so exists in contacts array) then run the function again.
+    if (ids.includes(randomActor.id)) {
+      pickRandom();
+      // else add to contacts
+    } else setContacts([...contacts, randomActor]);
+  }
+
   // Iteration 4 - Function to sort actor array by name and popularity
-  console.log(AllContacts)
-  
+
   // Sort by name
   function sortName() {
     const sortedArray = [...contacts];
@@ -22,7 +42,6 @@ function App() {
       return 0;
     });
     setContacts(sortedArray);
-    console.log(AllContacts)
   }
 
   // Sort by Popularity
@@ -39,40 +58,12 @@ function App() {
     setContacts(sortedArray);
   }
 
-  // Function to pick a random number from 0 - AllContacts array length)
-  /* function pickRandom() {
-    let n = Math.floor(Math.random() * AllContacts.length);
-    // Then add that random number to the index of AllContacts to select a random actor
-    let randomActor = AllContacts[n];
-    
-    // Then push that actor into the actor array
-    contacts.push(randomActor);
-    
-    // The use splice to remove that actor from AllContacts Array
-    AllContacts.splice(n, 1);
-    console.log(AllContacts)
-  } */
-
-  // Iteration 2: Function to pick a random actor from the list of contacts ✅
-  function pickRandom() {
-    let randomNumber = Math.floor(Math.random() * AllContacts.length);
-    // Then add that random number to the index of AllContacts to select a random actor
-    let randomActor = AllContacts[randomNumber];
-    
-    // Then push that actor into the actor array
-    //contacts.push(randomActor);
-    setContacts([...contacts, randomActor])
-    
-    // The use splice to remove that actor from AllContacts Array
-    AllContacts.splice(randomActor, 1);
-  }
-
   // Iteration 5: Remove Contact function and using it in onClick inside of the button ✅
   function deleteActor(actorId) {
-    const filteredActors = contacts.filter(actor => {
-        return actor.id !== actorId
-    })
-    setContacts(filteredActors)
+    const filteredActors = contacts.filter((actor) => {
+      return actor.id !== actorId;
+    });
+    setContacts(filteredActors);
   }
 
   // return page with above functions and objects rendeed
@@ -84,44 +75,61 @@ function App() {
           <button onClick={sortName}>Sort by name</button>
           <button onClick={pickRandom}>Pick Random</button>
           <button onClick={sortPopularity}>Sort by popularity</button>
-        </div>
-<div className="tableContainer">
-
-<h1>Contacts: {contacts.length}</h1>
-<h1>AllContacts: {AllContacts.length}</h1>
-        <table>
-
-          <tr>
-         
-              <td>Picture</td>
-              <td>Name</td>
-              <td>Popularity</td>
-              <td>Won Oscar</td>
-              <td>Won Emmy</td>
-              
-              </tr>
+         </div>
+        <div className="tableContainer">
+        <h2>Array Length Counts</h2>
+        <div className="counts">
+          <h3>Contacts: {contacts.length}</h3>
+          <h3>AllContacts: {AllContacts.length}</h3>
+          </div>
+          <hr></hr>
+          <table>
+            <tr>
+              <td className="tHeader">Picture</td>
+              <td className="tHeader">Name</td>
+              <td className="tHeader">Popularity</td>
+              <td className="tHeader">Won Oscar</td>
+              <td className="tHeader">Won Emmy</td>
+            </tr>
 
             {contacts.map((contacts1) => {
               return (
                 <tr key={contacts1.id}>
                   <td>
                     <img src={contacts1.pictureUrl} alt={contacts1.name} />
-                    <td>
-                    <button onClick={() => {deleteActor(contacts1.id)}}>Delete me</button>
-                    </td>
+                    <br />
+                      <button
+                        onClick={() => {
+                          deleteActor(contacts1.id);
+                        }}
+                      >
+                        Delete me
+                      </button>
+                    
                   </td>
                   <td>{contacts1.name}</td>
-                  <td>{contacts1.popularity}</td>
-                {/* Iteration 2: conditionally display trophy if the actor has won emmy or oscar using a ternary operator ✅*/}
-                  <td>{contacts1.wonOscar ? <p>{String.fromCodePoint('0x1F3C6')}</p> : " " }</td>
-                  <td>{contacts1.wonEmmy ? <p>{String.fromCodePoint('0x1F3C6')}</p> : " " }</td>
+                  <td>{contacts1.popularity.toFixed(2)}</td>
+                  {/* Iteration 2: conditionally display trophy if the actor has won emmy or oscar using a ternary operator ✅*/}
+                  <td>
+                    {contacts1.wonOscar ? (
+                      <p>{String.fromCodePoint("0x1F3C6")}</p>
+                    ) : (
+                      " "
+                    )}
+                  </td>
+                  <td>
+                    {contacts1.wonEmmy ? (
+                      <p>{String.fromCodePoint("0x1F3C6")}</p>
+                    ) : (
+                      " "
+                    )}
+                  </td>
                 </tr>
               );
             })}
-          
-        </table>
+          </table>
+        </div>
       </div>
-    </div>
     </div>
   );
 }
