@@ -29,8 +29,11 @@ img {
   justify-content: space-between;
 }
 
-.tableContainer table{
+/* .tableContainer table{
   ;
+} */
+
+.buttons {
+  display: flex;
+  gap: 15px;
 }
-
-

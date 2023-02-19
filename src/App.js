@@ -5,12 +5,12 @@ import { useState } from "react"
 
 
 function App() {
-  // Iteration 1 - Creating a state variable to store an array (contacts) containing first 5 items. Also remove those items from AllContacts
+  // Iteration 1 - Creating a state variable to store an array (contacts) containing first 5 items. Also remove those items from AllContacts 
   const [contacts, setContacts] = useState(AllContacts.slice(0,5));
   // Iteration 4 - Function to sort actor array by name and popularity
   console.log(AllContacts)
-  // Name
-
+  
+  // Sort by name
   function sortName() {
     const sortedArray = [...contacts];
     sortedArray.sort((a, b) => {
@@ -25,8 +25,7 @@ function App() {
     console.log(AllContacts)
   }
 
-  // Popularity
-
+  // Sort by Popularity
   function sortPopularity() {
     const sortedArray = [...contacts];
     sortedArray.sort((a, b) => {
@@ -40,7 +39,7 @@ function App() {
     setContacts(sortedArray);
   }
 
-  // Function to pick generate a random number from 0-AllContacts array length)
+  // Function to pick a random number from 0 - AllContacts array length)
   function pickRandom() {
     let n = Math.floor(Math.random() * AllContacts.length);
     // Then add that random number to the index of AllContacts to select a random actor
@@ -54,14 +53,30 @@ function App() {
     console.log(AllContacts)
   }
 
+  function addRandom(){
+    let randomNumber = Math.floor(Math.random() * AllContacts)
+    contacts.push
+  }
+ 
+
+  // Iteration 5: Remove Contact function and using it in onClick inside of the button ✅
+  function deleteActor(actorId) {
+    const filteredActors = contacts.filter(actor => {
+        return actor.id !== actorId
+    })
+    setContacts(filteredActors)
+  }
+
   // return page with above functions and objects rendeed
   return (
     <div className="App">
       <div className="container">
         <h1>IronContacts</h1>
-        <button onClick={pickRandom}>Pick Random</button>
-        <button onClick={sortName}>Click me to sort by name</button>
-        <button onClick={sortPopularity}>Click me to sort by popularity</button>
+        <div className="buttons">
+          <button onClick={sortName}>Sort by name</button>
+          <button onClick={pickRandom}>Pick Random</button>
+          <button onClick={sortPopularity}>Sort by popularity</button>
+        </div>
 <div className="tableContainer">
 
 <h1>Contacts: {contacts.length}</h1>
@@ -78,16 +93,18 @@ function App() {
               
               </tr>
 
-
             {contacts.map((contacts1) => {
               return (
                 <tr key={contacts1.id}>
                   <td>
                     <img src={contacts1.pictureUrl} alt={contacts1.name} />
+                    <td>
+                    <button onClick={() => {deleteActor(contacts1.id)}}>Delete me</button>
+                    </td>
                   </td>
                   <td>{contacts1.name}</td>
                   <td>{contacts1.popularity}</td>
-  {/* Iteration 2 conditionally display trophy if the actor has won emmy or oscar using a ternary operator*/}
+                {/* Iteration 2: conditionally display trophy if the actor has won emmy or oscar using a ternary operator ✅*/}
                   <td>{contacts1.wonOscar ? <p>{String.fromCodePoint('0x1F3C6')}</p> : " " }</td>
                   <td>{contacts1.wonEmmy ? <p>{String.fromCodePoint('0x1F3C6')}</p> : " " }</td>
                 </tr>
