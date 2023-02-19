@@ -40,7 +40,7 @@ function App() {
   }
 
   // Function to pick a random number from 0 - AllContacts array length)
-  function pickRandom() {
+  /* function pickRandom() {
     let n = Math.floor(Math.random() * AllContacts.length);
     // Then add that random number to the index of AllContacts to select a random actor
     let randomActor = AllContacts[n];
@@ -51,13 +51,21 @@ function App() {
     // The use splice to remove that actor from AllContacts Array
     AllContacts.splice(n, 1);
     console.log(AllContacts)
-  }
+  } */
 
-  function addRandom(){
-    let randomNumber = Math.floor(Math.random() * AllContacts)
-    contacts.push
+  // Iteration 2: Function to pick a random actor from the list of contacts ✅
+  function pickRandom() {
+    let randomNumber = Math.floor(Math.random() * AllContacts.length);
+    // Then add that random number to the index of AllContacts to select a random actor
+    let randomActor = AllContacts[randomNumber];
+    
+    // Then push that actor into the actor array
+    //contacts.push(randomActor);
+    setContacts([...contacts, randomActor])
+    
+    // The use splice to remove that actor from AllContacts Array
+    AllContacts.splice(randomActor, 1);
   }
- 
 
   // Iteration 5: Remove Contact function and using it in onClick inside of the button ✅
   function deleteActor(actorId) {
