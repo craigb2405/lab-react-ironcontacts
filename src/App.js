@@ -17,10 +17,8 @@ function App() {
 
     // Used the follow solution as AllContacts array could still produce an actor already in the contacts array. This solution uses Sets which I found on https://joshcollinsworth.com/blog/confirm-all-ids-are-unique-in-an-array-of-javascript-objects-using-map-and-sets.
 
-    // use Set to map contacts into a variable containing only ids.
-    let ids = new Set(contacts.map((contacts) => contacts.id));
-    // use spread operator to create array called ids and spread the set into it.
-    ids = [...ids];
+    // Map over contacts to create an array containing only ids
+    let ids = contacts.map((contacts) => contacts.id);
     // If randomActor.id is found within ids (so exists in contacts array) then run the function again.
     if (ids.includes(randomActor.id)) {
       pickRandom();
